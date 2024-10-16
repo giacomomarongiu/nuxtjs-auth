@@ -21,7 +21,7 @@
             <NuxtLink class="nav-link" to="/auth/login">Login</NuxtLink>
           </li>
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/about">About</NuxtLink>
+            <NuxtLink class="nav-link" to="/public/about">About</NuxtLink>
           </li>
         </ul>
       </div>

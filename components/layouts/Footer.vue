@@ -22,7 +22,7 @@
               <NuxtLink class="text-dark" to="/auth/login">Login</NuxtLink>
             </li>
             <li>
-              <NuxtLink class="text-dark" to="/about">About</NuxtLink>
+              <NuxtLink class="text-dark" to="/public/about">About</NuxtLink>
             </li>
           </ul>
         </div>
