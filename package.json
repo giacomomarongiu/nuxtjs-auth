@@ -13,7 +13,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "fs": "^0.0.1-security",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.13.2",
     "pinia": "^2.2.4",
     "vite": "^5.4.9",
     "vue": "latest",
@@ -24,6 +24,7 @@
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "eslint": "^8.48.0",
     "prettier": "^3.3.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vue-tsc": "^2.1.6"
   }
 }

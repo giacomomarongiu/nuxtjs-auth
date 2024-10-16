@@ -1,18 +1,20 @@
 // Importo il plugin di Pinia
 import { defineStore } from "pinia";
+import type { AuthState, LoginResponse } from "~/types/logicTypes";
 
 // Definisco uno store per l'autenticazione
 export const useAuthStore = defineStore("auth", {
-  // Definisco lo stato iniziale
-  state: () => ({
-    // Inizializzo il token e l'utente a null
-    token: null as string | null,
-    // Inizializzo l'utente a null
-    user: null as {
-      name: string;
-      email: string;
-    } | null,
+  // Definisco lo stato iniziale con il tipo AuthState
+  state: (): AuthState => ({
+    token: null,
+    user: null,
   }),
+  // Definisco dei getters
+  getters: {
+    isAuthenticated: (state): boolean => {
+      return !!state.token; // Restituisce true se il token esiste
+    },
+  },
 
   // Definisco delle azioni per gestire il login e il logout
   // Le azioni sono funzioni che possono modificare lo stato
@@ -28,7 +30,7 @@ export const useAuthStore = defineStore("auth", {
       // Utilizzo il blocco try/catch per gestire gli errori
       try {
         // Simulo una chiamata API per autenticare l'utente
-        const response = await $fetch("/api/auth/login", {
+        const response = await $fetch<LoginResponse>("/api/auth/login", {
           method: "POST", // Tipo di richiesta HTTP: POST è utilizzato per inviare dati
           body: { username, password }, // Corpo della richiesta: le credenziali dell'utente
         });
