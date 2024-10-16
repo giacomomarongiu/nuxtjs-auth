@@ -20,6 +20,6 @@ main {
 }
 </style>
 <script setup lang="ts">
-import NavBar from "~/components/layouts/NavBar.vue";
-import Footer from "~/components/layouts/Footer.vue";
+import NavBar from "~/global-layouts/NavBar.vue";
+import Footer from "~/global-layouts/Footer.vue";
 </script>

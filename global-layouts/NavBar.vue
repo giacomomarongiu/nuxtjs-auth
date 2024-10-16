@@ -18,10 +18,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/auth/login">Login</NuxtLink>
+            <NuxtLink class="nav-link" to="/login">Login</NuxtLink>
           </li>
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/public/about">About</NuxtLink>
+            <NuxtLink class="nav-link" to="/about">About</NuxtLink>
           </li>
         </ul>
       </div>

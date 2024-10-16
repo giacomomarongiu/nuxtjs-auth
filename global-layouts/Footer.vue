@@ -19,10 +19,10 @@
               <NuxtLink class="text-dark" to="/">Home</NuxtLink>
             </li>
             <li>
-              <NuxtLink class="text-dark" to="/auth/login">Login</NuxtLink>
+              <NuxtLink class="text-dark" to="/login">Login</NuxtLink>
             </li>
             <li>
-              <NuxtLink class="text-dark" to="/public/about">About</NuxtLink>
+              <NuxtLink class="text-dark" to="/about">About</NuxtLink>
             </li>
           </ul>
         </div>
