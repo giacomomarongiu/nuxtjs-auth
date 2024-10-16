@@ -1,14 +1,14 @@
 import { useAuthStore } from "~/stores/auth";
 
 export default defineNuxtRouteMiddleware((to, from) => {
-  //console.log("Middleware auth eseguito su qualsiasi rotta:", to.path);
+  const authStore = useAuthStore(); // Recupera il tuo store di autenticazione
 
-  const authStore = useAuthStore();
+  const isAuthenticated = authStore.isAuthenticated; // Usa la tua logica di autenticazione
 
-  // Se l'utente non è autenticato e sta cercando di accedere a una pagina protetta, reindirizza al login
-  if (!authStore.token && to.path.startsWith("/protected")) {
-    //console.log("Utente non autenticato, reindirizzamento a /auth/login");
-
-    return navigateTo("/auth/login");
+  // Controlla se la rotta richiede autenticazione
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    // Se non autenticato, reindirizza a /login
+    return navigateTo("/login"); // Reindirizza a /login se non autenticato
   }
+  // Se autenticato, continua
 });
