@@ -12,6 +12,7 @@
   "dependencies": {
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "fs": "^0.0.1-security",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.4",
     "vite": "^5.4.9",
