@@ -1,75 +1,14 @@
-# Nuxt 3 Minimal Starter
+# Nuxt.js Authentication Project
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Questo progetto è una Single Page Application (SPA) costruita con **Nuxt.js 3** e **TypeScript**. Include l'integrazione di **Pinia** per la gestione dello stato, **Bootstrap** per lo stile e un sistema di autenticazione basato su **JWT**. Le rotte protette sono gestite tramite un middleware globale che verifica se l'utente è autenticato, con reindirizzamento a una pagina di login se l'utente non è loggato.
 
-## Setup
+## Processo di sviluppo
+- Inizializzazione del progetto con `npx create-nuxt-app`
+- Installazione di **Pinia** per la gestione dello stato
+- Installazione di **Bootstrap** per lo stile
+- Definizione directory del progetto
+- Creazione di componenti e pagine
+- Creazione di un servizio per la gestione dello stato dell'utente
+- Creazione di un middleware globale per le rotte protette
+- Hooks per la gestione dell'autenticazione e la pulizia del Url
 
-Make sure to install the dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
