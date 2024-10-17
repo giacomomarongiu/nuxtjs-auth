@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 // Importa lo store di Pinia per l'autenticazione
 import { useAuthStore } from "~/stores/auth";
@@ -17,12 +18,20 @@ const login = () => {
 
 // Funzione per simulare il login e forzare il token
 const simulateLogin = () => {
-  authStore.$state.token = "test-token"; // Imposta un token fittizio per simulare l'autenticazione
+  authStore.setToken("test-token"); // Usa la funzione setToken per impostare e salvare il token nel localStorage
   authStore.user = { name: "Test User", email: "testuser@example.com" }; // Imposta un utente di test
-  console.log("Autenticazione simulata:", authStore.$state.token);
+  console.log("Autenticazione simulata:", authStore.token);
+
+  // Verifica se il token è stato salvato correttamente nel localStorage
+  console.log("Token nel localStorage:", localStorage.getItem("token"));
+
   // Reindirizza l'utente alla dashboard
   router.push("/dashboard"); // Redirezione alla pagina protetta
 };
+
+definePageMeta({
+  middleware: "guest", // Applica il middleware per bloccare gli utenti autenticati
+});
 </script>
 
 <template>
