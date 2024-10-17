@@ -1,15 +1,8 @@
 <script setup lang="ts">
-import { useAuthStore } from "~/stores/auth"; // Importa lo store di autenticazione
-import { useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useAuthStore } from "~/stores/auth";
 
-const authStore = useAuthStore(); // Accedi allo store di autenticazione
-const router = useRouter();
-
-// Funzione per gestire il logout
-const logout = () => {
-  authStore.logout(); // Chiama la funzione di logout dallo store
-  router.push("/login"); // Reindirizza l'utente alla pagina di login
-};
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -28,11 +21,13 @@ const logout = () => {
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Mostra il menu di navigazione basato sullo stato di autenticazione -->
+      <!-- Mostra il menu di navigazione basato sullo stato di autenticazione solo lato client -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <!-- Se l'utente è autenticato, mostra il menu per le pagine protette -->
+          <!-- Controlla l'autenticazione solo lato client -->
+
           <template v-if="authStore.isAuthenticated">
+            <!-- Menu per utenti autenticati -->
             <li class="nav-item">
               <NuxtLink class="nav-link" to="/dashboard">Dashboard</NuxtLink>
             </li>
@@ -46,15 +41,13 @@ const logout = () => {
               <NuxtLink class="nav-link" to="/products">Products</NuxtLink>
             </li>
             <li class="nav-item">
-              <button class="btn btn-link nav-link" @click="logout">
+              <button class="btn btn-link nav-link" @click="authStore.logout()">
                 Logout
               </button>
-              <!-- Bottone per il logout -->
             </li>
           </template>
-
-          <!-- Se l'utente non è autenticato, mostra il menu pubblico -->
           <template v-else>
+            <!-- Menu pubblico -->
             <li class="nav-item">
               <NuxtLink class="nav-link" to="/login">Login</NuxtLink>
             </li>
@@ -67,7 +60,3 @@ const logout = () => {
     </div>
   </nav>
 </template>
-
-<style scoped>
-/* Stili personalizzati per l'header */
-</style>
