@@ -1,4 +1,5 @@
-import { useRouter } from "vue-router";
+import { defineStore } from "pinia";
+
 import type { AuthState, LoginResponse } from "~/types/logicTypes";
 
 // Definisco lo store per l'autenticazione
