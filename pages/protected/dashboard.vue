@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { useAuthStore } from "~/stores/auth";
 
-// Definisci un middleware specifico per la pagina
+// Inizializza lo store di autenticazione
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -14,8 +15,8 @@ import { useAuthStore } from "~/stores/auth";
         <div class="card shadow-sm">
           <div class="card-body">
             <h5 class="card-title">User Information</h5>
-            <p class="card-text">Username: JohnDoe</p>
-            <p class="card-text">Email: johndoe@example.com</p>
+            <p class="card-text">Email: {{ authStore.getEmail }}</p>
+            <!-- Usa il getter -->
           </div>
         </div>
       </div>
@@ -45,33 +46,5 @@ import { useAuthStore } from "~/stores/auth";
         </div>
       </div>
     </div>
-
-    <!-- Additional content could go here -->
-    <div class="row mt-4">
-      <div class="col-12">
-        <h2>Quick Links</h2>
-        <ul class="list-group"></ul>
-      </div>
-    </div>
   </div>
 </template>
-
-<style scoped>
-/* Aggiungi qualche stile personalizzato per migliorare l'aspetto */
-.card {
-  border-radius: 10px;
-  transition: box-shadow 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.list-group-item {
-  cursor: pointer;
-}
-
-.list-group-item:hover {
-  background-color: #f8f9fa;
-}
-</style>
