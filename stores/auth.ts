@@ -1,20 +1,20 @@
-// Importo il plugin di Pinia
-import { defineStore } from "pinia";
+import { useRouter } from "vue-router";
 import type { AuthState, LoginResponse } from "~/types/logicTypes";
 
-// Definisco uno store per l'autenticazione
+// Definisco lo store per l'autenticazione
 export const useAuthStore = defineStore("auth", {
   // Definisco lo stato iniziale con il tipo AuthState
   state: (): AuthState => ({
     token: null,
-    user: null,
+    user: null, // Non viene usato da Reqres, ma lasciato per future espansioni
+    mail: null,
   }),
 
   // Definisco dei getters
   getters: {
-    isAuthenticated: (state): boolean => {
-      return !!state.token; // Restituisce true se il token esiste
-    },
+    isAuthenticated: (state: AuthState): boolean => !!state.token, // Verifica se il token esiste
+    getToken: (state: AuthState): string | null => state.token, // Restituisce il token
+    getEmail: (state: AuthState): string | null => state.mail, // Restituisce l'email
   },
 
   // Definisco delle azioni per gestire il login e il logout
@@ -22,48 +22,68 @@ export const useAuthStore = defineStore("auth", {
     // Questa azione setta il token e lo salva nel localStorage
     setToken(token: string) {
       this.token = token;
-      // Salvo il token nel localStorage per mantenerlo dopo il refresh della pagina
       localStorage.setItem("token", token);
     },
 
-    // Recupera il token dal localStorage quando l'app si carica
+    setUserEmail(email: string) {
+      this.mail = email;
+      localStorage.setItem("mail", email);
+    },
+
+    // Recupera il token e l'email dal localStorage quando l'app si carica
     initializeAuth() {
       if (process.client) {
         const storedToken = localStorage.getItem("token");
+        const storedEmail = localStorage.getItem("mail");
+
         if (storedToken) {
-          this.token = storedToken; // Imposta il token nello store
+          this.token = storedToken;
           console.log("Token recuperato dal localStorage:", this.token);
         } else {
           console.log("Nessun token trovato nel localStorage");
         }
+
+        if (storedEmail) {
+          this.mail = storedEmail;
+          console.log("Email recuperata dal localStorage:", this.mail);
+        } else {
+          console.log("Nessuna email trovata nel localStorage");
+        }
       }
     },
 
-    // Questa azione effettua il login dell'utente
-    async login(username: string, password: string) {
+    // Azione di login tipizzata
+    async login(email: string, password: string): Promise<void> {
       try {
-        // Simulo una chiamata API per autenticare l'utente
-        const response = await $fetch<LoginResponse>("/api/auth/login", {
-          method: "POST", // Tipo di richiesta HTTP: POST è utilizzato per inviare dati
-          body: { username, password }, // Corpo della richiesta: le credenziali dell'utente
-        });
+        // Chiamata API per autenticare l'utente su Reqres.in
+        const response = await $fetch<LoginResponse>(
+          "https://reqres.in/api/login",
+          {
+            method: "POST", // Tipo di richiesta HTTP
+            body: { email, password }, // Corpo della richiesta con le credenziali
+          },
+        );
 
-        // Setta il token restituito dall'API e salva l'utente
+        // Setta il token e l'email restituiti dall'API
         this.setToken(response.token);
-        this.user = response.user;
+        this.setUserEmail(email);
+        console.log("Login avvenuto con successo, token:", response.token);
       } catch (error) {
-        // Intercetto gli errori e li stampo in console
-        console.error("Login failed", error);
+        console.error("Login fallito", error);
       }
     },
 
     // Azione di logout
-    logout() {
-      // Reset dello stato quando l'utente si disconnette
+    logout(): void {
+      // Reset dello stato
       this.token = null;
       this.user = null;
-      // Rimuovo il token dal localStorage
+      this.mail = null;
+
+      // Rimuovo il token e l'email dal localStorage
       localStorage.removeItem("token");
+      localStorage.removeItem("mail");
+
       // Reindirizzo l'utente alla pagina di login
       const router = useRouter();
       router.push("/login");
