@@ -1,0 +1,73 @@
+<script setup lang="ts">
+import { useAuthStore } from "~/stores/auth"; // Importa lo store di autenticazione
+import { useRouter } from "vue-router";
+
+const authStore = useAuthStore(); // Accedi allo store di autenticazione
+const router = useRouter();
+
+// Funzione per gestire il logout
+const logout = () => {
+  authStore.logout(); // Chiama la funzione di logout dallo store
+  router.push("/login"); // Reindirizza l'utente alla pagina di login
+};
+</script>
+
+<template>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <NuxtLink class="navbar-brand" to="/">Login Test</NuxtLink>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Mostra il menu di navigazione basato sullo stato di autenticazione -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <!-- Se l'utente è autenticato, mostra il menu per le pagine protette -->
+          <template v-if="authStore.isAuthenticated">
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/dashboard">Dashboard</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/settings">Settings</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/user/profile">Profile</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/products">Products</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-link nav-link" @click="logout">
+                Logout
+              </button>
+              <!-- Bottone per il logout -->
+            </li>
+          </template>
+
+          <!-- Se l'utente non è autenticato, mostra il menu pubblico -->
+          <template v-else>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/login">Login</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/about">About</NuxtLink>
+            </li>
+          </template>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</template>
+
+<style scoped>
+/* Stili personalizzati per l'header */
+</style>
