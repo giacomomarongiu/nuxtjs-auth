@@ -1,36 +1,22 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-// Importa lo store di Pinia per l'autenticazione
-import { useAuthStore } from "~/stores/auth";
+// Importa il composable useLogin
+import { useLogin } from "~/composables/useLogin";
 
-// Definisce i campi reattivi per username e password
-const username = ref(""); // Definisce un campo reattivo per username
-const password = ref(""); // Definisce un campo reattivo per password
-const authStore = useAuthStore(); // Utilizza lo store di Pinia
-const router = useRouter(); // Inizializza il router
+// Inizializza il composable
+const { email, password, login } = useLogin();
 
-// Funzione che effettua il login chiamando l'azione nello store
-const login = () => {
-  // Chiama l'azione login dello store di Pinia
-  authStore.login(username.value, password.value); // Passa i dati inseriti
-};
-
-// Funzione per simulare il login e forzare il token
-// Usa il composable `useLoginSimulation`
-const { simulateLogin } = useLoginSimulation();
-
+// Applica il middleware per bloccare gli utenti autenticati
 definePageMeta({
-  middleware: "guest", // Applica il middleware per bloccare gli utenti autenticati
+  middleware: "guest",
 });
 </script>
 
 <template>
   <div class="container w-50 my-5">
     <h1>Login</h1>
-    <form @submit.prevent="">
+    <form @submit.prevent="login">
       <div class="mb-3">
-        <input v-model="username" placeholder="Username" class="form-control" />
+        <input v-model="email" placeholder="Email" class="form-control" />
       </div>
       <div class="mb-3">
         <input
@@ -40,9 +26,7 @@ definePageMeta({
           class="form-control"
         />
       </div>
-      <button @click="simulateLogin" type="submit" class="btn btn-primary">
-        Login
-      </button>
+      <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
 </template>
