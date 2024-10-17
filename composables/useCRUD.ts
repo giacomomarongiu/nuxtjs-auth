@@ -7,7 +7,7 @@ export const useCRUD = <T>(baseUrl: string) => {
   // Uso ref per i dati, così posso reagire ai cambiamenti in modo reattivo
   const items = ref<T[]>([]); // Array che conterrà tutti gli elementi
   const item = ref<T | null>(null); // Singolo elemento, utile per fetch di un singolo dato
-  const isLoading = ref(true); // Gestisco lo stato di caricamento
+  const isLoading = ref<boolean>(true); // Gestisco lo stato di caricamento
   const errorMessage = ref<string | null>(null); // Messaggi di errore in caso di problemi con le richieste
 
   const authStore = useAuthStore(); // Recupero il token dallo store di autenticazione
