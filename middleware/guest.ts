@@ -14,7 +14,5 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (authStore.isAuthenticated) {
       return navigateTo("/dashboard");
     }
-  } else {
-    console.log("Eseguo middleware guest lato server (SSR).");
   }
 });

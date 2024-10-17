@@ -28,7 +28,7 @@ definePageMeta({
 <template>
   <div class="container w-50 my-5">
     <h1>Login</h1>
-    <form @submit.prevent="simulateLogin">
+    <form @submit.prevent="">
       <div class="mb-3">
         <input v-model="username" placeholder="Username" class="form-control" />
       </div>

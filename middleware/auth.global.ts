@@ -7,6 +7,10 @@ export default defineNuxtRouteMiddleware(
 
     const isAuthenticated: boolean = authStore.isAuthenticated; // Tipizza esplicitamente come boolean
 
+    // Escludi la pagina di login dal middleware globale
+    if (to.path === "/login") {
+      return;
+    }
     // Controlla se la rotta richiede autenticazione
     if (to.meta.requiresAuth && !isAuthenticated) {
       // Se non autenticato, reindirizza a /login
