@@ -13,14 +13,11 @@ export interface Page {
 // Interfaccia per lo stato dell'autenticazione
 export interface AuthState {
   token: string | null;
-  user: { name: string; email: string } | null;
+  user: string | null; // Tipizzato come stringa o null se non utilizzato
+  mail: string | null;
 }
 
 // Interfaccia per la risposta della chiamata API di login
 export interface LoginResponse {
   token: string;
-  user: {
-    name: string;
-    email: string;
-  };
 }
