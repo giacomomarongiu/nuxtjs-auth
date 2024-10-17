@@ -8,7 +8,7 @@ import { useRoute, useRouter } from "vue-router";
 // Inizializzo il router e la route per accedere all'ID
 const route = useRoute();
 const router = useRouter();
-const userId = route.params.id;
+const userId: string | undefined = route.params.id;
 
 // Uso il composable generico per ottenere e aggiornare i dati dell'utente
 const {
@@ -25,7 +25,7 @@ onMounted(() => {
 });
 
 // Funzione per aggiornare i dettagli dell'utente
-const updateUser = async () => {
+const updateUser = async (): Promise<void> => {
   if (user.value) {
     // Assicurati che i dati dell'utente siano disponibili
     await updateItem(userId, user.value); // Aggiorno l'utente con i nuovi dati

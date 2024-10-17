@@ -12,11 +12,11 @@ const { deleteItem, isLoading, errorMessage } = useCRUD<User>(
 
 // Recupero l'ID dell'utente dalla rotta
 const route = useRoute();
-const userId = route.params.id;
+const userId: string | undefined = route.params.id;
 const router = useRouter();
 
 // Funzione per eliminare l'utente
-const deleteUser = async () => {
+const deleteUser = async (): Promise<void> => {
   try {
     await deleteItem(userId); // Elimina l'utente
     console.log("Utente eliminato con successo.");
@@ -27,7 +27,7 @@ const deleteUser = async () => {
 };
 
 // Quando la pagina è montata, richiamo la funzione per eliminare l'utente
-onMounted(() => {
+onMounted((): Promise<void> => {
   deleteUser(); // Esegue la funzione di eliminazione
 });
 </script>

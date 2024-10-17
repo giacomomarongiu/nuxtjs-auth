@@ -15,7 +15,7 @@ const {
 
 // Recupero l'ID dell'utente dalla rotta
 const route = useRoute(); // Uso useRoute per accedere ai parametri della rotta
-const userId = route.params.id; // Ottengo l'ID dell'utente
+const userId: string | undefined = route.params.id; // Ottengo l'ID dell'utente
 const router = useRouter(); // Uso useRouter per gestire il redirect
 
 // Quando la pagina è montata, richiamo la funzione per recuperare i dettagli dell'utente
@@ -24,12 +24,12 @@ onMounted(() => {
 });
 
 // Funzione per gestire l'eliminazione dell'utente
-const deleteUser = () => {
+const deleteUser = (): void => {
   router.push(`/apiUsers/${userId}/delete`); // Reindirizza alla pagina di eliminazione
 };
 
 // Funzione per gestire la modifica dell'utente
-const editUser = () => {
+const editUser = (): void => {
   router.push(`/apiUsers/${userId}/edit`); // Reindirizza alla pagina di modifica
 };
 </script>

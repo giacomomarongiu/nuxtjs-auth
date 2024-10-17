@@ -13,7 +13,7 @@ const {
 } = useCRUD<User>("https://reqres.in/api/users");
 
 // Quando la pagina è montata, richiamo la funzione per recuperare gli utenti
-onMounted(() => {
+onMounted((): Promise<void> => {
   fetchItems(); // Fetch della lista utenti
 });
 </script>
