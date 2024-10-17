@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // Importa il composable useLogin
-import { useLogin } from "~/composables/useLogin";
+import { useLogin } from "~/composables/loginLogic/useLogin";
 
 // Inizializza il composable
 const { email, password, login } = useLogin();

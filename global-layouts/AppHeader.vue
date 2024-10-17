@@ -38,7 +38,7 @@ const authStore = useAuthStore();
               <NuxtLink class="nav-link" to="/user/profile">Profile</NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/products">Products</NuxtLink>
+              <NuxtLink class="nav-link" to="/apiUsers">Products</NuxtLink>
             </li>
             <li class="nav-item">
               <button class="btn btn-link nav-link" @click="authStore.logout()">
