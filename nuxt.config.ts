@@ -6,7 +6,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   plugins: ["~/plugins/pinia"],
   css: ["bootstrap/dist/css/bootstrap.css"],
-
+  plugins: [
+    { src: "~/plugins/bootstrap.client.ts", mode: "client" }, // Importa Bootstrap JS solo sul client
+  ],
   router: {
     middleware: ["auth"], // Applica il middleware "auth" globalmente
   },
