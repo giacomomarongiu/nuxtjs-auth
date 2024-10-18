@@ -1,37 +1,65 @@
-// ~/composables/useCRUD.ts
+// Questo composable gestisce le operazioni CRUD (Create, Read, Update, Delete) per un'entità generica
+// Riceve un URL di base per le richieste HTTP e utilizza il token per autenticare le richieste dallo store di autenticazione di Pinia
+// La tipizzazione è generica per rendere il composable più flessibile e riutilizzabile con i generici di TypeScript
 import { ref } from "vue";
-import { useAuthStore } from "~/stores/auth"; // Uso il mio store per l'autenticazione, dove gestisco il token
+
+// Importo il mio store per l'autenticazione, dove gestisco il token
+import { useAuthStore } from "~/stores/auth";
 
 // Creo un composable generico per le CRUD
 export const useCRUD = <T>(baseUrl: string) => {
   // Uso ref per i dati, così posso reagire ai cambiamenti in modo reattivo
+  // Ho usato un TypeScript generic per rendere il composable più flessibile
   const items = ref<T[]>([]); // Array che conterrà tutti gli elementi
   const item = ref<T | null>(null); // Singolo elemento, utile per fetch di un singolo dato
+  // Variabile per gestire lo stato di caricamento e mostrare un loader
   const isLoading = ref<boolean>(true); // Gestisco lo stato di caricamento
+  // Variabile per gestire i messaggi di errore
   const errorMessage = ref<string | null>(null); // Messaggi di errore in caso di problemi con le richieste
 
   const authStore = useAuthStore(); // Recupero il token dallo store di autenticazione
 
-  // Funzione per recuperare una lista di elementi
+  // Funzione asincrona per recuperare tutti gli elementi
   const fetchItems = async () => {
-    isLoading.value = true; // Inizio caricamento
+    // Inizio caricamento
+    isLoading.value = true;
+    //Utilizzo un try catch per gestire eventuali errori
     try {
-      const token = authStore.getToken; // Recupero il token
+      // Recupero il token dallo store di autenticazione gestito con Pinia
+      const token = authStore.getToken;
+      // Controllo se il token è presente
       if (token) {
         // Effettuo la richiesta passando l'URL in modo dinamico
+        // $fetch è un'utility di Nuxt per fare richieste HTTP
+        // A differenza di fetch, $fetch è più semplice e gestisce automaticamente il parsing dei dati
+        // Rispetto da axios, $fetch è più leggero e integrato in Nuxt, ma meno flessibile
+        // Con axios si possono gestire meglio le configurazioni e i tipi di richiesta
+
+        // Assegno a response i dati recuperati dalla richiesta
         const response = await $fetch<{ data: T[] }>(`${baseUrl}`, {
+          // Grazie a headers, che è una proprietà di fetch, posso passare il token per autenticare la richiesta
+          // Posso passare anche altri header come Content-Type, Accept, ecc.
           headers: {
             Authorization: `Bearer ${token}`, // Passo il token per autenticare la richiesta
           },
         });
+        // Assegno i dati recuperati alla variabile reattiva items
         items.value = response.data; // Assegno i dati alla variabile reattiva
       } else {
-        errorMessage.value = "Token non presente"; // Messaggio di errore se il token non è presente
+        // Messaggio di errore se il token non è presente
+        // In teoria non dovrebbe mai accadere, la rotta è protetta
+        errorMessage.value = "Token non presente";
       }
+      //utilizzo catch per gestire eventuali errori
     } catch (error) {
-      errorMessage.value = "Errore nel recupero dei dati."; // Se qualcosa va storto, registro l'errore
+      // Messaggio di errore generico in caso di problemi
+      errorMessage.value = error.message
+        ? `Errore: ${error.message}`
+        : "Errore nel recupero dei dati."; // Se qualcosa va storto, registro l'errore
+      console.error("Dettagli dell'errore:", error); // Faccio anche un log dell'errore per ulteriori indagini
     } finally {
-      isLoading.value = false; // Fine caricamento
+      // Utilizzo finally per assicurarmi che isLoading venga sempre settato a false
+      isLoading.value = false;
     }
   };
 
