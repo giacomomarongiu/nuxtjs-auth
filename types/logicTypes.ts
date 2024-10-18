@@ -21,3 +21,11 @@ export interface AuthState {
 export interface LoginResponse {
   token: string;
 }
+
+// Interfaccia per la prop di un componente modale di conferma
+export interface ConfirmationModalProps {
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
