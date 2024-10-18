@@ -4,11 +4,12 @@
     <NavBar />
 
     <!-- Main content: NuxtPage con transizione -->
-    <transition name="fade" mode="out-in">
-      <main class="flex-grow-1">
+    <main class="flex-grow-1">
+      <transition name="fade" mode="out-in">
         <NuxtPage />
-      </main>
-    </transition>
+      </transition>
+    </main>
+
     <!-- Footer -->
     <Footer />
   </div>
