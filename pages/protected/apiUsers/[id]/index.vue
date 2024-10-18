@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-// Importo il composable generico
-import { onMounted } from "vue";
+// Importo i composables e utilità
+import { ref } from "vue";
 import { useCRUD } from "~/composables/useCRUD";
-import type { User } from "~/types/APITypes"; // Definisco il tipo 'User' per tipizzare i dati
-import { useRoute, useRouter } from "vue-router"; // Importo useRoute per accedere ai parametri della rotta e useRouter per i redirect
+import type { User } from "~/types/APITypes";
+import { useRoute, useRouter } from "vue-router";
+
+// Stato per la modale di conferma
+const showModal = ref(false);
 
 // Uso il composable per recuperare i dettagli di un singolo utente
 const {
@@ -11,12 +14,13 @@ const {
   isLoading,
   errorMessage,
   fetchItemById,
+  deleteItem,
 } = useCRUD<User>("https://reqres.in/api/users");
 
 // Recupero l'ID dell'utente dalla rotta
-const route = useRoute(); // Uso useRoute per accedere ai parametri della rotta
-const userId: string | undefined = route.params.id; // Ottengo l'ID dell'utente
-const router = useRouter(); // Uso useRouter per gestire il redirect
+const route = useRoute();
+const userId: string | undefined = route.params.id;
+const router = useRouter();
 
 // Quando la pagina è montata, richiamo la funzione per recuperare i dettagli dell'utente
 onMounted(() => {
@@ -24,8 +28,13 @@ onMounted(() => {
 });
 
 // Funzione per gestire l'eliminazione dell'utente
-const deleteUser = (): void => {
-  router.push(`/apiUsers/${userId}/delete`); // Reindirizza alla pagina di eliminazione
+const confirmDeleteUser = async (): Promise<void> => {
+  try {
+    await deleteItem(userId); // Elimina l'utente
+    router.push("/apiUsers"); // Reindirizza alla lista degli utenti dopo l'eliminazione
+  } catch (error) {
+    console.error("Errore durante l'eliminazione dell'utente:", error);
+  }
 };
 
 // Funzione per gestire la modifica dell'utente
@@ -63,7 +72,9 @@ const editUser = (): void => {
         <button @click="editUser" class="btn btn-warning me-2">
           Edit User
         </button>
-        <button @click="deleteUser" class="btn btn-danger">Delete User</button>
+        <button @click="showModal = true" class="btn btn-danger">
+          Delete User
+        </button>
       </div>
 
       <!-- Pulsante per tornare alla lista degli utenti -->
@@ -71,6 +82,49 @@ const editUser = (): void => {
         <NuxtLink to="/apiUsers" class="btn btn-primary"
           >Back to Users</NuxtLink
         >
+      </div>
+
+      <!-- Modale di conferma per l'eliminazione -->
+      <div
+        v-if="showModal"
+        class="modal fade show"
+        tabindex="-1"
+        style="display: block; background-color: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Conferma Eliminazione</h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="showModal = false"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Sei sicuro di voler eliminare questo utente? Questa azione è
+                irreversibile.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="showModal = false"
+              >
+                Annulla
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="confirmDeleteUser"
+              >
+                Elimina
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -82,9 +136,16 @@ const editUser = (): void => {
   margin: 0 auto;
 }
 
-.button-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.modal-content {
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
 }
 </style>
