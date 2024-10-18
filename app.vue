@@ -3,11 +3,12 @@
     <!-- Header/Navbar -->
     <NavBar />
 
-    <!-- Main content: NuxtPage -->
-    <main class="flex-grow-1">
-      <NuxtPage />
-    </main>
-
+    <!-- Main content: NuxtPage con transizione -->
+    <transition name="fade" mode="out-in">
+      <main class="flex-grow-1">
+        <NuxtPage />
+      </main>
+    </transition>
     <!-- Footer -->
     <Footer />
   </div>
@@ -18,7 +19,16 @@
 main {
   padding: 20px;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
 </style>
+
 <script setup lang="ts">
 import NavBar from "~/global-layouts/AppHeader.vue";
 import Footer from "~/global-layouts/AppFooter.vue";
