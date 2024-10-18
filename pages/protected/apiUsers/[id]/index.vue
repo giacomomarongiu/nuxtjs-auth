@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 // Importo i composables e utilità
 import { ref } from "vue";
-import { useCRUD } from "~/composables/useCRUD";
+import { useCRUD } from "~/composables/useCRUD"; // Composable CRUD generico
+import { useConfirmation } from "~/composables/useConfirmationModal"; // Composable per la conferma
 import type { User } from "~/types/APITypes";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import ConfirmationModal from "~/components/layouts/ConfirmationModal.vue"; // Importo la modale
 
-// Stato per la modale di conferma
-const showModal = ref(false);
-
-// Uso il composable per recuperare i dettagli di un singolo utente
+// Uso il composable CRUD per recuperare i dettagli di un singolo utente
 const {
   item: user,
   isLoading,
@@ -17,29 +16,31 @@ const {
   deleteItem,
 } = useCRUD<User>("https://reqres.in/api/users");
 
+// Uso il composable di conferma per gestire la conferma di eliminazione
+const {
+  showModal,
+  confirmAction,
+  isLoading: isActionLoading,
+  errorMessage: actionErrorMessage,
+} = useConfirmation();
+
 // Recupero l'ID dell'utente dalla rotta
 const route = useRoute();
 const userId: string | undefined = route.params.id;
-const router = useRouter();
 
 // Quando la pagina è montata, richiamo la funzione per recuperare i dettagli dell'utente
 onMounted(() => {
   fetchItemById(userId); // Fetch del singolo utente
 });
 
-// Funzione per gestire l'eliminazione dell'utente
-const confirmDeleteUser = async (): Promise<void> => {
-  try {
-    await deleteItem(userId); // Elimina l'utente
-    router.push("/apiUsers"); // Reindirizza alla lista degli utenti dopo l'eliminazione
-  } catch (error) {
-    console.error("Errore durante l'eliminazione dell'utente:", error);
-  }
-};
-
 // Funzione per gestire la modifica dell'utente
 const editUser = (): void => {
   router.push(`/apiUsers/${userId}/edit`); // Reindirizza alla pagina di modifica
+};
+
+// Funzione per eliminare l'utente con conferma
+const confirmDeleteUser = () => {
+  confirmAction(() => deleteItem(userId), "/apiUsers"); // Conferma e azione di eliminazione
 };
 </script>
 
@@ -79,52 +80,31 @@ const editUser = (): void => {
 
       <!-- Pulsante per tornare alla lista degli utenti -->
       <div class="text-center mt-4">
-        <NuxtLink to="/apiUsers" class="btn btn-primary"
-          >Back to Users</NuxtLink
-        >
+        <NuxtLink to="/apiUsers" class="btn btn-primary">
+          Back to Users
+        </NuxtLink>
       </div>
 
-      <!-- Modale di conferma per l'eliminazione -->
-      <div
+      <!-- Modale di conferma per l'eliminazione dell'utente -->
+      <ConfirmationModal
         v-if="showModal"
-        class="modal fade show"
-        tabindex="-1"
-        style="display: block; background-color: rgba(0, 0, 0, 0.5)"
+        title="Conferma Eliminazione"
+        message="Sei sicuro di voler eliminare questo utente? Questa azione è irreversibile."
+        @confirm="confirmDeleteUser"
+        @cancel="showModal = false"
+      />
+
+      <!-- Se ci sono errori durante l'azione di conferma, li mostro -->
+      <div
+        v-if="actionErrorMessage"
+        class="alert alert-danger text-center mt-4"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Conferma Eliminazione</h5>
-              <button
-                type="button"
-                class="btn-close"
-                @click="showModal = false"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <p>
-                Sei sicuro di voler eliminare questo utente? Questa azione è
-                irreversibile.
-              </p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                @click="showModal = false"
-              >
-                Annulla
-              </button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="confirmDeleteUser"
-              >
-                Elimina
-              </button>
-            </div>
-          </div>
-        </div>
+        <p>{{ actionErrorMessage }}</p>
+      </div>
+
+      <!-- Se l'azione è in corso, mostro un messaggio di attesa -->
+      <div v-if="isActionLoading" class="text-center mt-4">
+        <p>Eliminando l'utente, attendere...</p>
       </div>
     </div>
   </div>
@@ -134,18 +114,5 @@ const editUser = (): void => {
 .card {
   max-width: 400px;
   margin: 0 auto;
-}
-
-.modal-content {
-  background-color: #fff;
-  border-radius: 0.5rem;
-}
-
-.modal-header {
-  border-bottom: none;
-}
-
-.modal-footer {
-  border-top: none;
 }
 </style>
