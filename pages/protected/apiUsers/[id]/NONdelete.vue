@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 // Importo il composable generico e il componente della modale
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useCRUD } from "~/composables/useCRUD";
 import type { User } from "~/types/APITypes";
 import { useRoute, useRouter } from "vue-router";
-import ConfirmationModal from "~/components/ConfirmationModal.vue"; // Importo la modale
+import ConfirmationModal from "~/components/layouts/ConfirmationModal.vue"; // Importo la modale
 
 // Stato per la modale di conferma
-const showModal = ref(false);
+const showModal = ref(true);
 
 // Uso il composable per gestire l'eliminazione dell'utente
 const { deleteItem, isLoading, errorMessage } = useCRUD<User>(
@@ -29,11 +29,6 @@ const confirmDeleteUser = async (): Promise<void> => {
   }
 };
 
-// Mostra la modale all'apertura della pagina
-onMounted(() => {
-  showModal.value = true; // Mostra la modale
-});
-
 // Funzione per chiudere la modale senza eliminare l'utente
 const cancelDelete = () => {
   router.push(`/apiUsers/${userId}`); // Torna alla pagina dell'utente
@@ -50,9 +45,8 @@ const cancelDelete = () => {
     </div>
 
     <!-- Modale di conferma -->
-    // Passo le props necessarie al componente della modale
     <ConfirmationModal
-      :show="showModal"
+      v-if="showModal"
       title="Conferma Eliminazione"
       message="Sei sicuro di voler eliminare questo utente? Questa operazione è irrevocabile."
       @confirm="confirmDeleteUser"
@@ -65,3 +59,10 @@ const cancelDelete = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.alert {
+  max-width: 400px;
+  margin: 0 auto;
+}
+</style>
