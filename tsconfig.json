@@ -10,7 +10,6 @@
     "esModuleInterop": true,
     "allowJs": true,
     "skipLibCheck": true,
-    "types": ["@nuxt/types"]
   },
   "exclude": [
     "node_modules",

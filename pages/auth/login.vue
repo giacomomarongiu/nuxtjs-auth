@@ -1,26 +1,30 @@
 <script lang="ts" setup>
-import { ref } from "vue";
-
-// Importa lo store di Pinia per l'autenticazione
+// Importa il composable useLogin
+import { useLogin } from "~/composables/loginLogic/useLogin";
 import { useAuthStore } from "~/stores/auth";
 
-const username = ref(""); // Definisce un campo reattivo per username
-const password = ref(""); // Definisce un campo reattivo per password
-const authStore = useAuthStore(); // Utilizza lo store di Pinia
+// Inizializza il composable ccn i metodi e le variabili necessarie
+const { email, password, login } = useLogin();
 
-// Funzione che effettua il login chiamando l'azione nello store
-const login = () => {
-  // Chiama l'azione login dello store di Pinia
-  authStore.login(username.value, password.value); // Passa i dati inseriti
-};
+// Recupero lo store
+const authStore = useAuthStore();
+const errorMessage = computed(() => authStore.errorMessage);
+// Applica il middleware per bloccare gli utenti autenticati
+// definePageMeta è un metodo di Nuxt che permette di definire i metadati della pagina
+// Ad esempio, oltre al middleware, è possibile definire:
+// title, description, layout, head, validate
+definePageMeta({
+  middleware: "guest",
+});
 </script>
 
 <template>
   <div class="container w-50 my-5">
     <h1>Login</h1>
+    <p v-if="errorMessage" class="text-danger">{{ errorMessage }}</p>
     <form @submit.prevent="login">
       <div class="mb-3">
-        <input v-model="username" placeholder="Username" class="form-control" />
+        <input v-model="email" placeholder="Email" class="form-control" />
       </div>
       <div class="mb-3">
         <input
