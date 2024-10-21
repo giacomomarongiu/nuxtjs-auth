@@ -43,6 +43,7 @@ export function useConfirmation() {
     }
   };
 
+  // Restituisco le variabili reactive e la funzione per confermare l'azione
   return {
     showModal,
     isLoading,

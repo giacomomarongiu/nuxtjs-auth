@@ -1,3 +1,8 @@
+// Questo composable modifica le pagine in base alla loro posizione nel progetto
+// Nuxt.js legge le pagine dalla cartella "pages" e le trasforma in un array di oggetti
+// Questo fa si che nell'url di una pagina ci siano delle stringhe che non vogliamo
+// Ad esempio, se una pagina è in "pages/public", l'url sarà "/public/nome-pagina"
+// Questo composable rimuove "public" dall'url rendeendo l'url "/nome-pagina"
 import type { Page } from "~/types/logicTypes";
 export function usePageModifiers() {
   // @ts-ignore

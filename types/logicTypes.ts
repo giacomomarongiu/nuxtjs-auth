@@ -1,6 +1,6 @@
 // Questo file definisce tipi destinati alla logica dell'applicazione,
-// come ad esempio il tipo `Page` che rappresenta una pagina dell'applicazione.
 
+// Interfaccia per rappresentare una pagina dell'applicazione di Nuxt.js
 export interface Page {
   path: string;
   file: string;
@@ -22,10 +22,12 @@ export interface LoginResponse {
   token: string;
 }
 
-// Interfaccia per la prop di un componente modale di conferma
+// Interfaccia per la prop di un componente ConfirmationModal
 export interface ConfirmationModalProps {
+  // Titolo e messaggio del modale
   title: string;
   message: string;
+  // Funzioni per gestire la conferma o l'annullamento dell'azione
   onConfirm: () => void;
   onCancel: () => void;
 }

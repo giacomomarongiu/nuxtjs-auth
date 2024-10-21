@@ -1,8 +1,17 @@
+// Questo script definisce lo store per l'autenticazione tramite Pinia
+// Lo store di Pinia è suddiviso in tre parti: state, getters e actions
+// Lo state definisce lo stato iniziale dell'applicazione
+// I getters permettono di accedere ai dati dello store in modo reattivo
+// Le actions permettono di modificare lo stato dello store
+
 import { defineStore } from "pinia";
 
+// Per una tipizzazione migliore, importiamo il tipo AuthState e LoginResponse da logicTypes
 import type { AuthState, LoginResponse } from "~/types/logicTypes";
 
 // Definisco lo store per l'autenticazione
+// Lo chiamo useAuthStore e lo definisco con defineStore di Pinia
+// Il primo argomento è il nome dello store, il secondo argomento è un oggetto con state, getters e actions
 export const useAuthStore = defineStore("auth", {
   // Definisco lo stato iniziale con il tipo AuthState
   state: (): AuthState => ({
@@ -11,7 +20,7 @@ export const useAuthStore = defineStore("auth", {
     mail: null,
   }),
 
-  // Definisco dei getters
+  // Definisco dei getters per accedere ai dati dello store in modo reattivo
   getters: {
     isAuthenticated: (state: AuthState): boolean => !!state.token, // Verifica se il token esiste
     getToken: (state: AuthState): string | null => state.token, // Restituisce il token
@@ -26,6 +35,8 @@ export const useAuthStore = defineStore("auth", {
       localStorage.setItem("token", token);
     },
 
+    // Questa azione setta l'email e la salva nel localStorage
+    // anche se non è strettamente necessario per l'autenticazione
     setUserEmail(email: string) {
       this.mail = email;
       localStorage.setItem("mail", email);
@@ -53,17 +64,19 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    // Azione di login tipizzata
-    async login(email: string, password: string): Promise<void> {
+    // Azione di login tipizzata che accetta un URL come parametro
+    // Se non viene passato, viene utilizzato l'URL di default di reqres
+    async login(
+      email: string,
+      password: string,
+      url: string = "https://reqres.in/api/login",
+    ): Promise<void> {
       try {
-        // Chiamata API per autenticare l'utente su Reqres.in
-        const response = await $fetch<LoginResponse>(
-          "https://reqres.in/api/login",
-          {
-            method: "POST", // Tipo di richiesta HTTP
-            body: { email, password }, // Corpo della richiesta con le credenziali
-          },
-        );
+        // Chiamata API per autenticare l'utente su un URL dinamico
+        const response = await $fetch<LoginResponse>(url, {
+          method: "POST", // Tipo di richiesta HTTP
+          body: { email, password }, // Corpo della richiesta con le credenziali
+        });
 
         // Setta il token e l'email restituiti dall'API
         this.setToken(response.token);

@@ -10,13 +10,16 @@ import { useAuthStore } from "~/stores/auth";
 export const useCRUD = <T>(baseUrl: string) => {
   // Uso ref per i dati, così posso reagire ai cambiamenti in modo reattivo
   // Ho usato un TypeScript generic per rendere il composable più flessibile
-  const items = ref<T[]>([]); // Array che conterrà tutti gli elementi
-  const item = ref<T | null>(null); // Singolo elemento, utile per fetch di un singolo dato
+  // Ho cercato di standardizzare quelle che sono le operazioni CRUD più comuni
+  // Qui salvo i dati recuperati dalla richiesta
+  const items = ref<T[]>([]);
+  // Qui salvo i dettagli di un singolo elemento
+  const item = ref<T | null>(null);
   // Variabile per gestire lo stato di caricamento e mostrare un loader
   const isLoading = ref<boolean>(true); // Gestisco lo stato di caricamento
   // Variabile per gestire i messaggi di errore
   const errorMessage = ref<string | null>(null); // Messaggi di errore in caso di problemi con le richieste
-
+  // Recupero il token dallo store di autenticazione
   const authStore = useAuthStore(); // Recupero il token dallo store di autenticazione
 
   // Funzione asincrona per recuperare tutti gli elementi
@@ -36,10 +39,12 @@ export const useCRUD = <T>(baseUrl: string) => {
         // Con axios si possono gestire meglio le configurazioni e i tipi di richiesta
 
         // Assegno a response i dati recuperati dalla richiesta
+        // Specifico che i dati sono un array di oggetti di tipo T
         const response = await $fetch<{ data: T[] }>(`${baseUrl}`, {
           // Grazie a headers, che è una proprietà di fetch, posso passare il token per autenticare la richiesta
-          // Posso passare anche altri header come Content-Type, Accept, ecc.
+          // Posso passare anche altri header come Content-Type, Accept, Language, ecc.
           headers: {
+            //Bearer è uno schema di autenticazione che utilizza un token
             Authorization: `Bearer ${token}`, // Passo il token per autenticare la richiesta
           },
         });
@@ -87,6 +92,9 @@ export const useCRUD = <T>(baseUrl: string) => {
   };
 
   // Funzione per creare un nuovo elemento
+  // Nota: Partial è un tipo di TypeScript che rende tutte le proprietà di un oggetto opzionali
+  // In questo modo posso passare solo alcune proprietà di un oggetto e non tutte
+  // Ma ci basiamo sempre sul tipo T per garantire che le proprietà siano corrette e flessibili
   const createItem = async (newItem: Partial<T>) => {
     isLoading.value = true; // Inizio caricamento
     try {
