@@ -18,6 +18,7 @@ export const useAuthStore = defineStore("auth", {
     token: null,
     user: null, // Non viene usato da Reqres, ma lasciato per future espansioni
     mail: null,
+    errorMessage: null,
   }),
 
   // Definisco dei getters per accedere ai dati dello store in modo reattivo
@@ -25,6 +26,7 @@ export const useAuthStore = defineStore("auth", {
     isAuthenticated: (state: AuthState): boolean => !!state.token, // Verifica se il token esiste
     getToken: (state: AuthState): string | null => state.token, // Restituisce il token
     getEmail: (state: AuthState): string | null => state.mail, // Restituisce l'email
+    getErrorMessage: (state: AuthState): string | null => state.errorMessage, // Restituisce l'email
   },
 
   // Definisco delle azioni per gestire il login e il logout
@@ -75,6 +77,7 @@ export const useAuthStore = defineStore("auth", {
 
     // Azione di login tipizzata che accetta un URL come parametro
     // Se non viene passato, viene utilizzato l'URL di default di reqres
+    // Ho separato la logica di login in un composabile per renderla riutilizzabile
     async login(
       email: string,
       password: string,
@@ -90,8 +93,10 @@ export const useAuthStore = defineStore("auth", {
         // Setta il token e l'email restituiti dall'API
         this.setToken(response.token);
         this.setUserEmail(email);
+        this.errorMessage = null;
         console.log("Login avvenuto con successo, token:", response.token);
       } catch (error) {
+        this.errorMessage = error.message;
         console.error("Login fallito", error);
       }
     },

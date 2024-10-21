@@ -15,6 +15,7 @@ export interface AuthState {
   token: string | null;
   user: string | null; // Tipizzato come stringa o null se non utilizzato
   mail: string | null;
+  errorMessage: string | null;
 }
 
 // Interfaccia per la risposta della chiamata API di login

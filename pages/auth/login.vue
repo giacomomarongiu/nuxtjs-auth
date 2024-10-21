@@ -1,10 +1,14 @@
 <script lang="ts" setup>
 // Importa il composable useLogin
 import { useLogin } from "~/composables/loginLogic/useLogin";
+import { useAuthStore } from "~/stores/auth";
 
 // Inizializza il composable ccn i metodi e le variabili necessarie
 const { email, password, login } = useLogin();
 
+// Recupero lo store
+const authStore = useAuthStore();
+const errorMessage = computed(() => authStore.errorMessage);
 // Applica il middleware per bloccare gli utenti autenticati
 // definePageMeta è un metodo di Nuxt che permette di definire i metadati della pagina
 // Ad esempio, oltre al middleware, è possibile definire:
@@ -17,6 +21,7 @@ definePageMeta({
 <template>
   <div class="container w-50 my-5">
     <h1>Login</h1>
+    <p v-if="errorMessage" class="text-danger">{{ errorMessage }}</p>
     <form @submit.prevent="login">
       <div class="mb-3">
         <input v-model="email" placeholder="Email" class="form-control" />
