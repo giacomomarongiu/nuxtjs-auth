@@ -12,7 +12,7 @@
             <p class="card-text">
               Manage your personal information and account settings.
             </p>
-            <NuxtLink to="/settings/user" class="btn btn-primary"
+            <NuxtLink to="/user/profile" class="btn btn-primary"
               >Edit Profile</NuxtLink
             >
           </div>

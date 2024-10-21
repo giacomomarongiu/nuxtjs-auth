@@ -9,9 +9,9 @@ import type { RouteLocationNormalized } from "vue-router";
 export default defineNuxtRouteMiddleware(
   // To e From sono oggetti RouteLocationNormalized che rappresentano la rotta attuale e precedente
   (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-    console.log(from);
-    console.log(to);
-    const authStore = useAuthStore(); // Recupera il tuo store di autenticazione
+    //console.log(from);
+    //console.log(to);
+    const authStore = useAuthStore(); // Recupera il mio store di autenticazione
     const isAuthenticated: boolean = authStore.isAuthenticated; // Tipizza esplicitamente come boolean
 
     // Escludo la pagina di login dal middleware globale per evitare loop infiniti
@@ -32,5 +32,6 @@ export default defineNuxtRouteMiddleware(
     }
 
     // Se autenticato, continua
+    //NOTA: In futuro dovro' aggiungere un controllo per verificare se il token è scaduto
   },
 );
