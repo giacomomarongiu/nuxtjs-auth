@@ -28,8 +28,12 @@ export const useAuthStore = defineStore("auth", {
   },
 
   // Definisco delle azioni per gestire il login e il logout
+  // NOTA: In futuro, aggiungerei un'azione per verificare se il token è scaduto
+  // NOTA: Ad esempio, isTokenExpired() che usa la libreria jwt-decode per decodificare il token e verificare la scadenza
   actions: {
     // Questa azione setta il token e lo salva nel localStorage
+    // NOTA: Non è strettamente necessario salvare il token nel localStorage
+    // NOTA: Sarebbe meglio salvare il token in un cookie con HttpOnly
     setToken(token: string) {
       this.token = token;
       localStorage.setItem("token", token);
@@ -45,9 +49,13 @@ export const useAuthStore = defineStore("auth", {
     // Recupera il token e l'email dal localStorage quando l'app si carica
     initializeAuth() {
       if (process.client) {
+        // Recupero il token e l'email dal localStorage
+        //NOTA: Qui in futuro lo recupererei dal cookie
         const storedToken = localStorage.getItem("token");
         const storedEmail = localStorage.getItem("mail");
+        //NOTA: Qui in futuro lo recupere
 
+        // Se il token esiste, lo setto nello
         if (storedToken) {
           this.token = storedToken;
           console.log("Token recuperato dal localStorage:", this.token);
@@ -55,6 +63,7 @@ export const useAuthStore = defineStore("auth", {
           console.log("Nessun token trovato nel localStorage");
         }
 
+        // Se l'email esiste, la set
         if (storedEmail) {
           this.mail = storedEmail;
           console.log("Email recuperata dal localStorage:", this.mail);

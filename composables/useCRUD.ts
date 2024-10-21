@@ -69,6 +69,8 @@ export const useCRUD = <T>(baseUrl: string) => {
   };
 
   // Funzione per recuperare un singolo elemento per ID
+  // NOTA:Valutare se è il caso di implementare un sistema di cache per evitare di fare richieste inutili
+  // NOTA:Valutare se è il caso di implementare un meccanismo di Replay per ripetere le richieste fallite
   const fetchItemById = async (id: string | number) => {
     isLoading.value = true; // Inizio caricamento
     try {
