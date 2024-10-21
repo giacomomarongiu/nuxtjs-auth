@@ -47,7 +47,10 @@
     <div class="row justify-content-center mt-4">
       <div class="col-lg-6 col-md-8 text-center">
         <button class="btn btn-danger me-2">Delete Account</button>
-        <button class="btn btn-secondary">Back to Dashboard</button>
+
+        <NuxtLink to="/dashboard" class="btn btn-secondary"
+          >Back to Dashboard</NuxtLink
+        >
       </div>
     </div>
   </div>

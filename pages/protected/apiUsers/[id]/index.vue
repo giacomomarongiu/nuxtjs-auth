@@ -1,10 +1,21 @@
+<!-- Questa pagina mostra i dettagli di un singolo utente,
+permettendo all'utente di modificarlo o eliminarlo.
+Tutto viene gestito tramite la compoable CRUD.
+I dati dell'utente vengono recuperati tramite una chiamata API
+e l'ID dell'utente viene recuperato dalla rotta.
+L'editUser funzione reindirizza l'utente alla pagina di modifica.
+La cancellazione dell'utente viene gestita con una modale
+ di conferma importata come componente.
+La lofica di eliminazione è gestita dal composable di conferma.
+-->
+
 <script lang="ts" setup>
 // Importo i composables e utilità
 import { ref } from "vue";
 import { useCRUD } from "~/composables/useCRUD"; // Composable CRUD generico
 import { useConfirmation } from "~/composables/useConfirmationModal"; // Composable per la conferma
 import type { User } from "~/types/APITypes";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import ConfirmationModal from "~/components/layouts/ConfirmationModal.vue"; // Importo la modale
 
 // Uso il composable CRUD per recuperare i dettagli di un singolo utente
@@ -27,8 +38,12 @@ const {
 // Recupero l'ID dell'utente dalla rotta
 const route = useRoute();
 const userId: string | undefined = route.params.id;
+// Importo il router per la navigazione
+// Mi serve per reindirizzare l'utente alla pagina di modifica
+const router = useRouter();
 
 // Quando la pagina è montata, richiamo la funzione per recuperare i dettagli dell'utente
+// Faccio un'altra chiamata per recuperare i dettagli dell'utente, non è detto che siano già stati caricati con la lista
 onMounted(() => {
   fetchItemById(userId); // Fetch del singolo utente
 });

@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+// Questa mmmodale di conferma accetta un titolo, un messaggio e due azioni
+// E' pensata per essere utilizzata in tutto il progetto per confermare azioni
+// come l'eliminazione di un elemento o l'uscita da una pagina senza salvare
 import { ConfirmationModalProps } from "~/types/logicTypes";
 
 // Accettiamo le props per titolo, messaggio e le azioni di conferma e annullamento
@@ -6,12 +9,14 @@ const props = defineProps<ConfirmationModalProps>();
 
 // Funzione per confermare l'azione
 const confirm = () => {
-  props.onConfirm(); // Eseguiamo la funzione di conferma passata come prop
+  // Chiamo la funzione passata come prop
+  props.onConfirm();
 };
 
 // Funzione per annullare l'azione
 const cancel = () => {
-  props.onCancel(); // Eseguiamo la funzione di annullamento passata come prop
+  // Chiamo la funzione passata come prop
+  props.onCancel();
 };
 </script>
 <template>

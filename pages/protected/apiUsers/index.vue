@@ -5,6 +5,7 @@ import { useCRUD } from "~/composables/useCRUD";
 import type { User } from "~/types/APITypes"; // Definisco il tipo 'User' per tipizzare i dati
 
 // Uso il composable generico per gestire gli utenti, passando l'URL in modo dinamico
+// desctrutturando i dati necessari
 const {
   items: users,
   isLoading,
@@ -41,6 +42,7 @@ onMounted((): Promise<void> => {
       </div>
 
       <!-- Se ho gli utenti, li mostro come card -->
+
       <div v-if="users && users.length" class="row">
         <div
           class="col-lg-4 col-md-6 mb-4"

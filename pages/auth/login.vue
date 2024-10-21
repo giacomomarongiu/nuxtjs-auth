@@ -2,10 +2,13 @@
 // Importa il composable useLogin
 import { useLogin } from "~/composables/loginLogic/useLogin";
 
-// Inizializza il composable
+// Inizializza il composable ccn i metodi e le variabili necessarie
 const { email, password, login } = useLogin();
 
 // Applica il middleware per bloccare gli utenti autenticati
+// definePageMeta è un metodo di Nuxt che permette di definire i metadati della pagina
+// Ad esempio, oltre al middleware, è possibile definire:
+// title, description, layout, head, validate
 definePageMeta({
   middleware: "guest",
 });
